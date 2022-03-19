@@ -37,11 +37,19 @@ Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-region = "us-east-2"
+region = "us-east-1"
 ```
 * В основной папке проекта проводим инициализацию бекенда, делаем планирование и убеждаемся, что всё срабатывает.
 ```
-Apply complete! Resources: 11 added, 0 changed, 0 destroyed
+$ (master)terraform apply "myplan"
+Acquiring state lock. This may take a few moments...
+module.vpc.aws_subnet.public[0]: Creating...
+aws_instance.diplom_instance[2]: Creating...
+aws_instance.diplom_instance[1]: Creating...
+aws_instance.diplom_instance[0]: Creating...
+.....
+Releasing state lock. This may take a few moments...
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 ```
 Тестовые подключения к ВМ выполнились успешно. В качестве примера, такая конфигурация у одной из ВМ:
 ```
@@ -60,10 +68,52 @@ model name	: Intel(R) Xeon(R) Platinum 8259CL CPU @ 2.50GHz
 ```
 Такой конфигурации хватит для запуска control plane и для работы с подами с приложением.
 
-2. >Запустить и сконфигурировать Kubernetes кластер.
+2. >Запустить и сконфигурировать Kubernetes кластер.  
+
+```
+PLAY RECAP **************************************************************************************************************************************************************
+localhost                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+node1                      : ok=565  changed=124  unreachable=0    failed=0    skipped=1141 rescued=0    ignored=2   
+node2                      : ok=369  changed=76   unreachable=0    failed=0    skipped=644  rescued=0    ignored=1   
+node3                      : ok=369  changed=76   unreachable=0    failed=0    skipped=643  rescued=0    ignored=1
+```
+
+```
+~# kubectl get nodes
+NAME    STATUS   ROLES                  AGE   VERSION
+node1   Ready    control-plane,master   25m   v1.21.3
+node2   Ready    <none>                 24m   v1.21.3
+node3   Ready    <none>                 24m   v1.21.3
+```
+
+```
+root@node1:~# kubectl get pods --all-namespaces
+NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE
+kube-system   calico-kube-controllers-5b4d7b4594-gkpjs   1/1     Running   1          24m
+kube-system   calico-node-5fd9x                          1/1     Running   0          25m
+kube-system   calico-node-9ts7d                          1/1     Running   0          25m
+kube-system   calico-node-g88fs                          1/1     Running   0          25m
+kube-system   coredns-8474476ff8-7wrjd                   1/1     Running   0          22m
+kube-system   coredns-8474476ff8-g722v                   1/1     Running   0          22m
+kube-system   dns-autoscaler-7df78bfcfb-dwgl7            1/1     Running   0          22m
+kube-system   kube-apiserver-node1                       1/1     Running   0          27m
+kube-system   kube-controller-manager-node1              1/1     Running   0          27m
+kube-system   kube-proxy-5zd7h                           1/1     Running   0          26m
+kube-system   kube-proxy-j2mt8                           1/1     Running   0          26m
+kube-system   kube-proxy-lph28                           1/1     Running   0          26m
+kube-system   kube-scheduler-node1                       1/1     Running   0          27m
+kube-system   nginx-proxy-node2                          1/1     Running   0          26m
+kube-system   nginx-proxy-node3                          1/1     Running   0          26m
+kube-system   nodelocaldns-8t8zj                         1/1     Running   0          22m
+kube-system   nodelocaldns-lql2n                         1/1     Running   0          22m
+kube-system   nodelocaldns-zwb6m                         1/1     Running   0          22m
+```
+
+
 3. >Установить и настроить систему мониторинга.
 4. >Настроить и автоматизировать сборку тестового приложения с использованием Docker-контейнеров.
 5. >Настроить CI для автоматической сборки и тестирования.
 6. >Настроить CD для автоматического развёртывания приложения
 
 
+8259CL
