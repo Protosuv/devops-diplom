@@ -111,6 +111,26 @@ kube-system   nodelocaldns-zwb6m                         1/1     Running   0    
 
 
 3. >Установить и настроить систему мониторинга.
+
+```
+# kubectl get pods -n monitoring 
+NAME                                   READY   STATUS    RESTARTS   AGE
+alertmanager-main-0                    2/2     Running   0          73s
+alertmanager-main-1                    2/2     Running   0          73s
+alertmanager-main-2                    2/2     Running   0          73s
+blackbox-exporter-69894767d5-7b5jw     3/3     Running   0          81s
+grafana-7bb5967c6-9s55z                1/1     Running   0          80s
+kube-state-metrics-5d6885d89-qrcnp     3/3     Running   0          80s
+node-exporter-g6fd5                    2/2     Running   0          80s
+node-exporter-txbfl                    2/2     Running   0          80s
+node-exporter-z4s74                    2/2     Running   0          80s
+prometheus-adapter-6cf5d8bfcf-5crrr    1/1     Running   0          79s
+prometheus-adapter-6cf5d8bfcf-rbmzj    1/1     Running   0          79s
+prometheus-k8s-0                       2/2     Running   0          72s
+prometheus-k8s-1                       0/2     Pending   0          72s
+prometheus-operator-7f58778b57-h5zpc   2/2     Running   0          79s
+```
+
 4. >Настроить и автоматизировать сборку тестового приложения с использованием Docker-контейнеров.
 5. >Настроить CI для автоматической сборки и тестирования.
 6. >Настроить CD для автоматического развёртывания приложения
