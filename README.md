@@ -70,6 +70,7 @@ model name	: Intel(R) Xeon(R) Platinum 8259CL CPU @ 2.50GHz
 
 2. >Запустить и сконфигурировать Kubernetes кластер.  
 
+В качестве инструмента развёртывания кластера, был избран уже опробованный раннее Kubspray. В настройках инвентаря были указаны внешние IP адреса серверов (нод), с учётом того факта, что сервера имеют внутренние IP адреса. После выполнения, система сообщает о результате:
 ```
 PLAY RECAP **************************************************************************************************************************************************************
 localhost                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
@@ -77,6 +78,7 @@ node1                      : ok=565  changed=124  unreachable=0    failed=0    s
 node2                      : ok=369  changed=76   unreachable=0    failed=0    skipped=644  rescued=0    ignored=1   
 node3                      : ok=369  changed=76   unreachable=0    failed=0    skipped=643  rescued=0    ignored=1
 ```
+Для просмотра состояния кластера, выполнен вход на первую ноду (на ней находится control plane):
 
 ```
 ~# kubectl get nodes
@@ -85,7 +87,7 @@ node1   Ready    control-plane,master   25m   v1.21.3
 node2   Ready    <none>                 24m   v1.21.3
 node3   Ready    <none>                 24m   v1.21.3
 ```
-
+Просматриваем состояние активных после инсталляции подов во всех неймспейсах:
 ```
 root@node1:~# kubectl get pods --all-namespaces
 NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE
@@ -134,6 +136,3 @@ prometheus-operator-7f58778b57-h5zpc   2/2     Running   0          79s
 4. >Настроить и автоматизировать сборку тестового приложения с использованием Docker-контейнеров.
 5. >Настроить CI для автоматической сборки и тестирования.
 6. >Настроить CD для автоматического развёртывания приложения
-
-
-8259CL
