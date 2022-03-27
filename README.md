@@ -122,26 +122,56 @@ kube-system   nodelocaldns-zwb6m                         1/1     Running   0    
 3. > ### Подготовка Kubernetes конфигурации
 > ### Установить и настроить систему мониторинга.
 
-* Для развёртывания системы мониторинга был пакет [kube-prometheus](https://github.com/prometheus-operator/kube-prometheus.git). Для возможности обращаться к веб интерфейсу Grafana, в манифест сервиса был добавлен NodePort. Этот порт был раннее описан и открыт в конфигурации VPC в Terraform.
+* Для развёртывания системы мониторинга был пакет [kube-prometheus](https://github.com/prometheus-operator/kube-prometheus.git). Для возможности обращаться к веб интерфейсу Grafana, в манифест сервиса был добавлен NodePort. Этот порт был раннее описан и открыт в конфигурации VPC в Terraform. Выполняем последовательно команды для создания всех необходимых ресурсов:
+```
+# kubectl create -f manifests/setup/
+customresourcedefinition.apiextensions.k8s.io/alertmanagerconfigs.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/alertmanagers.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/podmonitors.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/probes.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/prometheuses.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/prometheusrules.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/servicemonitors.monitoring.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/thanosrulers.monitoring.coreos.com created
+*namespace/monitoring created
+
+# kubectl create -f manifests/
+```
+Можно посмотреть, что создалось в системе:
 
 ```
-# kubectl get pods -n monitoring 
+# kubectl get pods -n monitoring
 NAME                                   READY   STATUS    RESTARTS   AGE
-alertmanager-main-0                    2/2     Running   0          73s
-alertmanager-main-1                    2/2     Running   0          73s
-alertmanager-main-2                    2/2     Running   0          73s
-blackbox-exporter-69894767d5-7b5jw     3/3     Running   0          81s
-grafana-7bb5967c6-9s55z                1/1     Running   0          80s
-kube-state-metrics-5d6885d89-qrcnp     3/3     Running   0          80s
-node-exporter-g6fd5                    2/2     Running   0          80s
-node-exporter-txbfl                    2/2     Running   0          80s
-node-exporter-z4s74                    2/2     Running   0          80s
-prometheus-adapter-6cf5d8bfcf-5crrr    1/1     Running   0          79s
-prometheus-adapter-6cf5d8bfcf-rbmzj    1/1     Running   0          79s
-prometheus-k8s-0                       2/2     Running   0          72s
-prometheus-k8s-1                       0/2     Pending   0          72s
-prometheus-operator-7f58778b57-h5zpc   2/2     Running   0          79s
+alertmanager-main-0                    2/2     Running   0          57s
+alertmanager-main-1                    2/2     Running   0          57s
+alertmanager-main-2                    2/2     Running   0          57s
+blackbox-exporter-676d976865-7ccf4     3/3     Running   0          73s
+grafana-6c4c6b8fb7-k6ggk               1/1     Running   0          73s
+kube-state-metrics-5d6885d89-46hbt     3/3     Running   0          72s
+node-exporter-25l26                    2/2     Running   0          72s
+node-exporter-62cm5                    2/2     Running   0          72s
+node-exporter-fr9hx                    2/2     Running   0          72s
+prometheus-adapter-6cf5d8bfcf-4hrl8    1/1     Running   0          72s
+prometheus-adapter-6cf5d8bfcf-jgwk8    1/1     Running   0          72s
+prometheus-k8s-0                       2/2     Running   0          56s
+prometheus-k8s-1                       2/2     Running   0          56s
+prometheus-operator-7f58778b57-c8wk7   2/2     Running   0          71s
+
+# kubectl get svc -n monitoring
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+alertmanager-main       ClusterIP   10.233.41.206   <none>        9093/TCP,8080/TCP            100s
+alertmanager-operated   ClusterIP   None            <none>        9093/TCP,9094/TCP,9094/UDP   84s
+blackbox-exporter       ClusterIP   10.233.62.171   <none>        9115/TCP,19115/TCP           100s
+grafana                 NodePort    10.233.19.163   <none>        3000:30000/TCP               100s
+kube-state-metrics      ClusterIP   None            <none>        8443/TCP,9443/TCP            99s
+node-exporter           ClusterIP   None            <none>        9100/TCP                     99s
+prometheus-adapter      ClusterIP   10.233.32.41    <none>        443/TCP                      99s
+prometheus-k8s          ClusterIP   10.233.55.195   <none>        9090/TCP,8080/TCP            99s
+prometheus-operated     ClusterIP   None            <none>        9090/TCP                     83s
+prometheus-operator     ClusterIP   None            <none>        8443/TCP                     99s
 ```
+Видно, что существует сервис Grafana на нужном порту. Вход осуществляется под учётными данными **admin:admin**
+
 
 4. >Настроить и автоматизировать сборку тестового приложения с использованием Docker-контейнеров.
 5. >Настроить CI для автоматической сборки и тестирования.
