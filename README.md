@@ -211,4 +211,10 @@ prometheus-operator     ClusterIP   None            <none>        8443/TCP      
 3. [Репозиторий](https://github.com/Protosuv/devops-diplom-ansible) с конфигурацией ansible, если был выбран способ создания Kubernetes кластера при помощи ansible.
 4. [Репозиторий](https://gitlab.com/Protosuv/diplom-nginx-app) с Dockerfile тестового приложения и ссылка на собранный docker image.
 5. [Репозиторий](https://github.com/Protosuv/devops-diplom-k8s-config) с конфигурацией Kubernetes кластера.
-6. [Ссылка](http://3.94.159.165:30001) на тестовое приложение и [веб интерфейс Grafana](http://3.94.159.165:30000/d/200ac8fdbfbb74b39aff88118e4d1c2c/kubernetes-compute-resources-node-pods?orgId=1&refresh=10s) с данными доступа (admin:admin).
+6. [Ссылка](http://3.94.159.165:30001) на тестовое приложение и [веб интерфейс Grafana](http://3.94.159.165:30000/d/200ac8fdbfbb74b39aff88118e4d1c2c/kubernetes-compute-resources-node-pods?orgId=1&refresh=10s) с данными доступа (admin:admin).  
+
+Тестовое приложение:
+![](https://github.com/Protosuv/devops-diplom/blob/main/diplom-app.png) 
+
+Интерфейс мониторинга:
+![](https://github.com/Protosuv/devops-diplom/blob/main/grafana.png)  
